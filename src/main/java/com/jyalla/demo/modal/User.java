@@ -9,12 +9,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
 @Entity(name = "user")
-@Table(name = "\"user\"", uniqueConstraints = @UniqueConstraint(columnNames = {"phone_no", "mail"}))
+@Table(name = "\"user\"") // , uniqueConstraints = @UniqueConstraint(columnNames = {"phone_no",
+                          // "mail"}))
 public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -25,12 +25,12 @@ public class User implements Serializable {
     private UUID id;
     @NotBlank(message = "username is mandatory")
     private String username;
-    @Column(name = "mail")
+    @Column(name = "mail", unique = true)
     @NotBlank(message = "email is mandatory")
     @Email(message = "email should be valid")
     private String email;
     @NotBlank(message = "phone_no is mandatory")
-    @Column(name = "phone_no")
+    @Column(name = "phone_no", unique = true)
     private String phoneNo;
     @Column(name = "profile_pic")
     private String profilePic;

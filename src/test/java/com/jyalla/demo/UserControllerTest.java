@@ -3,7 +3,6 @@ package com.jyalla.demo;
 import static org.junit.Assert.assertTrue;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.List;
 import java.util.UUID;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
@@ -14,7 +13,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestClientException;
 import com.jyalla.demo.modal.User;
 import com.jyalla.demo.service.UserService;
@@ -37,8 +35,8 @@ public class UserControllerTest extends BaseClass {
     @Order(1)
     public void getUsers() {
         ResponseEntity<String> entity = template.getForEntity("http://localhost:8080/rest/User", String.class);
-        template.getRestTemplate()
-                .setMessageConverters(List.of(new MappingJackson2HttpMessageConverter()));
+        // template.getRestTemplate()
+        // .setMessageConverters(List.of(new MappingJackson2HttpMessageConverter()));
         assertTrue(entity.getStatusCode()
                 .is2xxSuccessful());
     }
