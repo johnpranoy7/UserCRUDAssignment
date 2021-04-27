@@ -1,5 +1,6 @@
 package com.jyalla.demo.modal;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.UUID;
 import javax.persistence.Column;
@@ -8,17 +9,27 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 
 @Entity(name = "user")
-@Table(name = "\"user\"")
-public class User {
+@Table(name = "\"user\"", uniqueConstraints = @UniqueConstraint(columnNames = {"phone_no", "mail"}))
+public class User implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(generator = "org.hibernate.id.UUIDGenerator", strategy = GenerationType.AUTO)
     @Column(name = "id")
     private UUID id;
+    @NotBlank(message = "username is mandatory")
     private String username;
     @Column(name = "mail")
+    @NotBlank(message = "email is mandatory")
+    @Email(message = "email should be valid")
     private String email;
+    @NotBlank(message = "phone_no is mandatory")
     @Column(name = "phone_no")
     private String phoneNo;
     @Column(name = "profile_pic")
@@ -27,10 +38,12 @@ public class User {
     @Column(name = "created_by")
     private String createdBy;
     @Column(name = "created_on")
+    // @PastOrPresent
     private Date createdOn;
     @Column(name = "updated_by")
     private String updatedBy;
     @Column(name = "updated_on")
+    // @FutureOrPresent
     private Date updatedOn;
 
     public User() {
@@ -58,8 +71,8 @@ public class User {
         return id;
     }
 
-    public void setId(UUID id) {
-        this.id = id;
+    public void setId() {
+        this.id = UUID.randomUUID();
     }
 
     public String getUsername() {

@@ -44,4 +44,9 @@ public class UserServiceImpl implements UserService {
         userRepository.delete(delUser);
     }
 
+    public List<User> findByEmail(String email) {
+        logger.info("findByEmail() is Executed");
+        return userRepository.findByEmail(email);
+    }
+
 }

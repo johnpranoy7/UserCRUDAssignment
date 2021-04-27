@@ -3,6 +3,7 @@ package com.jyalla.demo.controller;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +43,7 @@ public class UserRestController {
     }
 
     @PostMapping(path = "/User")
-    public ResponseEntity<Object> saveUser(@RequestBody User emp) {
+    public ResponseEntity<Object> saveUser(@RequestBody @Valid User emp) {
         logger.info("saveUser() " + emp + " is Executed");
         emp.setUpdatedBy("Admin");
         emp.setUpdatedOn(new Date());
@@ -55,12 +56,12 @@ public class UserRestController {
             return new ResponseEntity<Object>("Created Successfully", HttpStatus.OK);
         } catch (Exception e) {
             logger.error("Exception while saving User" + e);
-            return new ResponseEntity<Object>("Unable to Insert User", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<Object>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
     @PutMapping(path = "/User/{id}")
-    public ResponseEntity<Object> updateUser(@RequestBody User emp, @PathVariable("id") int id) {
+    public ResponseEntity<Object> updateUser(@RequestBody @Valid User emp, @PathVariable("id") int id) {
         logger.info("updateUser() is Executed");
         emp.setUpdatedBy("Admin");
         emp.setUpdatedOn(new Date());
