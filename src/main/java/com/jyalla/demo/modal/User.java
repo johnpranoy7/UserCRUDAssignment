@@ -2,12 +2,16 @@ package com.jyalla.demo.modal;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -46,9 +50,21 @@ public class User implements Serializable {
     // @FutureOrPresent
     private Date updatedOn;
 
+    @OneToMany(mappedBy = "authorId", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    // @RestResource(path = "articles", rel = "articles")
+    private List<Blog> articles;
+
     public User() {
         super();
         // TODO Auto-generated constructor stub
+    }
+
+    public List<Blog> getArticles() {
+        return articles;
+    }
+
+    public void setArticles(List<Blog> articles) {
+        this.articles = articles;
     }
 
     public User(UUID id, String username, String email, String phone_no, String profile_pic, boolean status, String created_by, Date createdOn, String updated_by, Date updatedOn) {
@@ -107,7 +123,7 @@ public class User implements Serializable {
         this.profilePic = profilePic;
     }
 
-    public boolean isStatus() {
+    public boolean getStatus() {
         return status;
     }
 
@@ -141,6 +157,10 @@ public class User implements Serializable {
 
     public Date getUpdatedOn() {
         return updatedOn;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
     }
 
     public void setUpdatedOn(Date updatedOn) {

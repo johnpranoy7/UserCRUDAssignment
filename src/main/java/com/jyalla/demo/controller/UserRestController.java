@@ -61,18 +61,32 @@ public class UserRestController {
     }
 
     @PutMapping(path = "/User/{id}")
-    public ResponseEntity<Object> updateUser(@RequestBody @Valid User emp, @PathVariable("id") int id) {
+    public ResponseEntity<Object> updateUser(@RequestBody @Valid User emp, @PathVariable("id") UUID id) {
         logger.info("updateUser() is Executed");
-        emp.setUpdatedBy("Admin");
-        emp.setUpdatedOn(new Date());
-        User user = userService.save(emp);
-        logger.info("saved user is" + user);
-        if (user != null)
-            return ResponseEntity.status(HttpStatus.CREATED)
+        User user;
+        User singleUser = userService.getSingleUser(id);
+        if (singleUser != null) {
+            logger.info("Found existing User for PUT" + singleUser);
+            singleUser.setEmail(emp.getEmail());
+            singleUser.setUsername(emp.getUsername());
+            singleUser.setPhoneNo(emp.getPhoneNo());
+            singleUser.setProfilePic(emp.getProfilePic());
+            singleUser.setStatus(emp.getStatus());
+            singleUser.setUpdatedBy("Admin");
+            singleUser.setUpdatedOn(new Date());
+            user = userService.save(singleUser);
+            return ResponseEntity.status(HttpStatus.ACCEPTED)
                     .build();
-        else
+        } else {
+            // logger.info("Creating new User in PUT");
+            // emp.setUpdatedBy("Admin");
+            // emp.setUpdatedOn(new Date());
+            // emp.setCreatedBy("Admin");
+            // emp.setCreatedOn(new Date());
+            // user = userService.save(emp);
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .build();
+        }
     }
 
     @DeleteMapping(path = "/User/{id}")

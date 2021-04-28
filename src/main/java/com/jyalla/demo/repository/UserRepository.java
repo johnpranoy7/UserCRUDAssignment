@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import com.jyalla.demo.modal.User;
 
 @Repository
+// @RepositoryRestResource(collectionResourceRel = "users", path = "users")
 public interface UserRepository extends JpaRepository<User, UUID> {
     List<User> findByEmail(String email);
 }
