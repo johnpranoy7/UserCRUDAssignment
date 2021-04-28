@@ -32,7 +32,7 @@ public class Blog implements Serializable {
     @Column(unique = true)
     @NotEmpty
     private String url;
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "author_id", nullable = false)
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @JsonIgnore

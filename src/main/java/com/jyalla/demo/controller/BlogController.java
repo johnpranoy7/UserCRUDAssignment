@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.jyalla.demo.modal.Blog;
 import com.jyalla.demo.service.BlogService;
+import com.jyalla.demo.service.UserService;
 
 @RestController
 @RequestMapping(path = "/rest")
@@ -28,6 +29,9 @@ public class BlogController {
 
     @Autowired
     BlogService blogService;
+
+    @Autowired
+    UserService userService;
 
     @GetMapping(path = "/blog")
     public List<Blog> getArticles() {
@@ -41,13 +45,14 @@ public class BlogController {
         return blogService.getSingleArticle(id);
     }
 
-    @PostMapping(path = "/blog")
-    public ResponseEntity<Object> saveArticle(@RequestBody @Valid Blog article) {
+    @PostMapping(path = "/blog/{authorId}")
+    public ResponseEntity<Object> saveArticle(@RequestBody @Valid Blog article, @PathVariable("authorId") UUID authorId) {
         logger.info("saveArticle() " + article + " is Executed");
         article.setUpdatedBy("Admin");
         article.setUpdatedOn(new Date());
         article.setCreatedBy("Admin");
         article.setCreatedOn(new Date());
+        article.setAuthorId(userService.getSingleUser(authorId));
         Blog savedArticle;
         try {
             savedArticle = blogService.save(article);

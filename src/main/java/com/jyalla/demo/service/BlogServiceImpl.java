@@ -35,4 +35,10 @@ public class BlogServiceImpl implements BlogService {
         blogRepository.delete(delArticle);
     }
 
+    @Override
+    public List<Blog> findByTitle(String string) {
+        return blogRepository.findByTitle(string);
+
+    }
+
 }

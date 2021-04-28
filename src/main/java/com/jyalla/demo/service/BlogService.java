@@ -15,4 +15,6 @@ public interface BlogService {
 
     void deleteArticle(Blog delArticle);
 
+    List<Blog> findByTitle(String string);
+
 }
