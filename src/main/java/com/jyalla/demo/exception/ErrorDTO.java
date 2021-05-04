@@ -1,15 +1,31 @@
 package com.jyalla.demo.exception;
 
-public class ErrorDTO {
-    int statusCode;
-    String message;
+import java.util.List;
 
-    public int getStatusCode() {
-        return statusCode;
+public class ErrorDTO {
+
+    int status;
+    String message;
+    List<String> details;
+
+    public ErrorDTO(String message, List<String> details, int status) {
+        super();
+        this.message = message;
+        this.details = details;
+        this.status = status;
     }
 
-    public void setStatusCode(int statusCode) {
-        this.statusCode = statusCode;
+    public ErrorDTO() {
+        super();
+        // TODO Auto-generated constructor stub
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 
     public String getMessage() {
@@ -20,20 +36,19 @@ public class ErrorDTO {
         this.message = message;
     }
 
-    public ErrorDTO(int statusCode, String message) {
-        super();
-        this.statusCode = statusCode;
-        this.message = message;
+    public List<String> getDetails() {
+        return details;
     }
 
-    public ErrorDTO() {
-        super();
-        // TODO Auto-generated constructor stub
+    public void setDetails(List<String> details) {
+        this.details = details;
     }
 
     @Override
     public String toString() {
-        return "ErrorDTO [statusCode=" + statusCode + ", message=" + message + "]";
+        return "ErrorDTO [status=" + status + ", message=" + message + ", details=" + details + "]";
     }
+
+
 
 }

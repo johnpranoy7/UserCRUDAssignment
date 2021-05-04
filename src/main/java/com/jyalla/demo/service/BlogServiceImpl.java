@@ -2,6 +2,7 @@ package com.jyalla.demo.service;
 
 import java.util.List;
 import java.util.UUID;
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,6 +27,7 @@ public class BlogServiceImpl implements BlogService {
     }
 
     @Override
+    @Transactional
     public Blog save(@Valid Blog article) {
         return blogRepository.save(article);
     }

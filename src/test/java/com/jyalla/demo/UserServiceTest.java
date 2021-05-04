@@ -15,12 +15,14 @@ import com.jyalla.demo.service.UserService;
 @TestMethodOrder(OrderAnnotation.class)
 public class UserServiceTest extends BaseClass {
 
+
     @Autowired
     UserService userService;
 
     static UUID employeeId;
 
     @Test
+
     @Order(1)
     public void getAllUsers() {
         assertTrue(userService.getAllUsers()
@@ -28,6 +30,7 @@ public class UserServiceTest extends BaseClass {
     }
 
     @Test
+
     @Order(2)
     public void saveUser() {
         User user = new User();
@@ -40,32 +43,35 @@ public class UserServiceTest extends BaseClass {
     }
 
     @Test
+
     @Order(3)
     public void getUserById() {
         assertTrue(userService.getSingleUser(employeeId) != null);
     }
 
     @Ignore
+
     @Order(6)
     public void saveUser_MissingName() {
         User user = new User();
-        user.setEmail("servicetest@test.com");
-        // user.setUsername("hello");
+        user.setEmail("servicetest@test.com"); // user.setUsername("hello");
         user.setPhoneNo("6752398751");
         assertTrue(userService.save(user) != null);
     }
 
     @Ignore
+
     @Order(7)
     public void saveUser_MissingPhone() {
         User user = new User();
         user.setEmail("servicetest@test.com");
-        user.setUsername("hello");
-        // user.setPhoneNo("6752398751");
+        user.setUsername("hello"); //
+        user.setPhoneNo("6752398751");
         assertTrue(userService.save(user) != null);
     }
 
     @Test
+
     @Order(4)
     public void modifyUser() {
         User user = userService.getSingleUser(employeeId);
@@ -76,10 +82,12 @@ public class UserServiceTest extends BaseClass {
     }
 
     @Test
+
     @Order(5)
     public void deleteUser() {
         User user = userService.getSingleUser(employeeId);
         userService.delete(user);
         assertTrue(userService.getSingleUser(employeeId) == null);
     }
+
 }

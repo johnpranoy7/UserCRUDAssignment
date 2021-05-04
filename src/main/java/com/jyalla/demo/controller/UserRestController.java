@@ -17,11 +17,13 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import com.jyalla.demo.exception.UserNotFoundException;
 import com.jyalla.demo.modal.User;
 import com.jyalla.demo.service.UserService;
 
 
 @RestController
+// @Validated
 @RequestMapping(path = "/rest")
 public class UserRestController {
 
@@ -31,15 +33,20 @@ public class UserRestController {
     UserService userService;
 
     @GetMapping(path = "/User")
-    public List<User> getUsers() {
+    public ResponseEntity<List<User>> getUsers() {
         logger.info("getUsers() is Executed");
-        return userService.getAllUsers();
+        List<User> allUsers = userService.getAllUsers();
+        return new ResponseEntity<>(allUsers, HttpStatus.OK);
     }
 
     @GetMapping(path = "/User/{id}")
-    public User getOneUser(@PathVariable("id") UUID id) {
-        logger.info("getOneUser() " + id + " is Executed");
-        return userService.getSingleUser(id);
+    public ResponseEntity<User> getOneUser(@PathVariable("id") UUID id) {
+        logger.info("getOneUser() " + id.toString() + " is Executed");
+        User singleUser = userService.getSingleUser(id);
+        logger.info("singleUser=" + singleUser);
+        if (singleUser == null)
+            throw new UserNotFoundException("Userid not Found " + id);
+        return new ResponseEntity<User>(singleUser, HttpStatus.OK);
     }
 
     @PostMapping(path = "/User")
@@ -50,14 +57,10 @@ public class UserRestController {
         emp.setCreatedBy("Admin");
         emp.setCreatedOn(new Date());
         User user;
-        try {
-            user = userService.save(emp);
-            logger.info("saved User is " + user);
-            return new ResponseEntity<Object>("Created Successfully", HttpStatus.OK);
-        } catch (Exception e) {
-            logger.error("Exception while saving User" + e);
-            return new ResponseEntity<Object>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
+        user = userService.save(emp);
+        logger.info("saved User is " + user);
+        return new ResponseEntity<Object>(user, HttpStatus.CREATED);
+
     }
 
     @PutMapping(path = "/User/{id}")
@@ -78,14 +81,7 @@ public class UserRestController {
             return ResponseEntity.status(HttpStatus.ACCEPTED)
                     .build();
         } else {
-            // logger.info("Creating new User in PUT");
-            // emp.setUpdatedBy("Admin");
-            // emp.setUpdatedOn(new Date());
-            // emp.setCreatedBy("Admin");
-            // emp.setCreatedOn(new Date());
-            // user = userService.save(emp);
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .build();
+            throw new UserNotFoundException("Userid not Found " + id);
         }
     }
 
@@ -94,11 +90,13 @@ public class UserRestController {
         logger.info("deleteUser() is Executed");
         User delUser = userService.getSingleUser(id);
         logger.info("deleted user is" + delUser);
+        if (delUser == null)
+            throw new UserNotFoundException("Userid not Found " + id);
         try {
             userService.delete(delUser);
         } catch (Exception e) {
             logger.error("error Deleting the User" + delUser);
-            return new ResponseEntity<Object>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<Object>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return new ResponseEntity<Object>(HttpStatus.OK);
 

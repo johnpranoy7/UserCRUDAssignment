@@ -20,6 +20,7 @@ import com.jyalla.demo.service.UserService;
 @TestMethodOrder(OrderAnnotation.class)
 public class BlogServiceTest extends BaseClass {
 
+
     public static Logger logger = LoggerFactory.getLogger(BlogServiceTest.class);
 
     @Autowired
@@ -32,6 +33,7 @@ public class BlogServiceTest extends BaseClass {
     static UUID articleId;
 
     @Test
+
     @Order(1)
     public void getAllArticles() {
         assertTrue(blogService.getAllArticles()
@@ -39,6 +41,7 @@ public class BlogServiceTest extends BaseClass {
     }
 
     @Test
+
     @Order(2)
     public void saveArticle() {
         User user = new User();
@@ -61,16 +64,18 @@ public class BlogServiceTest extends BaseClass {
     }
 
     @Test
+
     @Order(3)
     public void getArticleById() {
         assertTrue(blogService.getSingleArticle(articleId) != null);
     }
 
     @Ignore
+
     @Order(6)
     public void saveArticle_MissingTitle() {
-        Blog blog = new Blog();
-        // blog.setTitle("DBMS");
+        Blog blog = new Blog(); //
+        blog.setTitle("DBMS");
         blog.setDescription("Database Management");
         blog.setUrl("www.dbms.com");
         blog.setAuthorId(savedUser);
@@ -79,11 +84,11 @@ public class BlogServiceTest extends BaseClass {
     }
 
     @Ignore
+
     @Order(7)
     public void saveArticle_MissingDescription() {
         Blog blog = new Blog();
-        blog.setTitle("DBMS");
-        // blog.setDescription("Database Management");
+        blog.setTitle("DBMS"); // blog.setDescription("Database Management");
         blog.setUrl("www.dbms.com");
         blog.setAuthorId(savedUser);
         Blog savedBlog = blogService.save(blog);
@@ -91,6 +96,7 @@ public class BlogServiceTest extends BaseClass {
     }
 
     @Test
+
     @Order(4)
     public void modifyArticle() {
         Blog singleArticle = blogService.getSingleArticle(articleId);
@@ -101,6 +107,7 @@ public class BlogServiceTest extends BaseClass {
     }
 
     @Test
+
     @Order(5)
     public void deleteUser() {
         Blog singleArticle = blogService.getSingleArticle(articleId);
@@ -111,10 +118,12 @@ public class BlogServiceTest extends BaseClass {
     }
 
     @Test
+
     @Order(8)
     public void findByTitle() {
         List<Blog> title = blogService.findByTitle("DS");
         logger.info("Inside findByTitle() TestCase " + title.toArray());
         logger.info("title.get(0) " + title.get(0));
     }
+
 }

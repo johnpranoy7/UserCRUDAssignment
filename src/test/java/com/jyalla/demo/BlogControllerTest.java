@@ -45,16 +45,18 @@ public class BlogControllerTest extends BaseClass {
     static UUID userId;
 
     @Test
+
     @Order(1)
     public void getBlogs() {
         ResponseEntity<String> entity = template.getForEntity(HTTP_LOCALHOST_8080_REST_BLOG, String.class);
-        // template.getRestTemplate()
-        // .setMessageConverters(List.of(new MappingJackson2HttpMessageConverter()));
+        // template.getRestTemplate() // .setMessageConverters(List.of(new
+        // MappingJackson2HttpMessageConverter()));
         assertTrue(entity.getStatusCode()
                 .is2xxSuccessful());
     }
 
     @Test
+
     @Order(3)
     public void getSingleBlog() {
         Blog blog = blogService.findByTitle("DBMS")
@@ -69,6 +71,7 @@ public class BlogControllerTest extends BaseClass {
     }
 
     @Test
+
     @Order(2)
     public void postBlog() throws RestClientException, URISyntaxException {
         User user = new User();
@@ -86,8 +89,8 @@ public class BlogControllerTest extends BaseClass {
         blog.setDescription("Database Management");
         blog.setUrl("www.dbms.com");
 
-        // template.getRestTemplate()
-        // .setMessageConverters(List.of(new MappingJackson2HttpMessageConverter()));
+        // template.getRestTemplate() // .setMessageConverters(List.of(new
+        // MappingJackson2HttpMessageConverter()));
 
         ResponseEntity<String> entity = this.template.postForEntity(new URI(HTTP_LOCALHOST_8080_REST_BLOG + userId.toString()), blog, String.class);
         logger.info(entity.getStatusCode()
@@ -97,6 +100,7 @@ public class BlogControllerTest extends BaseClass {
     }
 
     @Test
+
     @Order(4)
     public void putBlog() {
         Blog blog = new Blog();
@@ -107,15 +111,18 @@ public class BlogControllerTest extends BaseClass {
     }
 
     @Test
+
     @Order(5)
     public void deleteBlog() throws RestClientException, URISyntaxException {
         template.delete(new URI(HTTP_LOCALHOST_8080_REST_BLOG + articleId.toString()));
     }
 
     @Test
+
     @Order(6)
     public void deleteUser() throws RestClientException, URISyntaxException {
         logger.info("inside deleteUser() " + userId);
         template.delete(new URI(HTTP_LOCALHOST_8080_REST_USER + userId.toString()));
     }
+
 }
