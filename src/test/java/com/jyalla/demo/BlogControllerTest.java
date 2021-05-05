@@ -71,7 +71,6 @@ public class BlogControllerTest extends BaseClass {
     }
 
     @Test
-
     @Order(2)
     public void postBlog() throws RestClientException, URISyntaxException {
         User user = new User();
@@ -100,7 +99,6 @@ public class BlogControllerTest extends BaseClass {
     }
 
     @Test
-
     @Order(4)
     public void putBlog() {
         Blog blog = new Blog();
@@ -111,14 +109,12 @@ public class BlogControllerTest extends BaseClass {
     }
 
     @Test
-
     @Order(5)
     public void deleteBlog() throws RestClientException, URISyntaxException {
         template.delete(new URI(HTTP_LOCALHOST_8080_REST_BLOG + articleId.toString()));
     }
 
     @Test
-
     @Order(6)
     public void deleteUser() throws RestClientException, URISyntaxException {
         logger.info("inside deleteUser() " + userId);

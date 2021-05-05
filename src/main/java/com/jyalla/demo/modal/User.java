@@ -56,7 +56,6 @@ public class User implements Serializable {
 
     public User() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
     public List<Blog> getArticles() {
@@ -67,18 +66,16 @@ public class User implements Serializable {
         this.articles = articles;
     }
 
-    public User(UUID id, String username, String email, String phone_no, String profile_pic, boolean status, String created_by, Date createdOn, String updated_by, Date updatedOn) {
+    public User(UUID id, String username, String email, String phoneNo, String profilePic, boolean status, String createdBy) {
         super();
         this.id = id;
         this.username = username;
         this.email = email;
-        this.phoneNo = phone_no;
-        this.profilePic = profile_pic;
+        this.phoneNo = phoneNo;
+        this.profilePic = profilePic;
         this.status = status;
-        this.createdBy = created_by;
-        this.createdOn = createdOn;
-        this.updatedBy = updated_by;
-        this.updatedOn = updatedOn;
+        this.createdBy = createdBy;
+        this.createdOn = new Date();
     }
 
 

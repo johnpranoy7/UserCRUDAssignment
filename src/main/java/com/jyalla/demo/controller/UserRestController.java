@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -32,73 +33,75 @@ public class UserRestController {
     @Autowired
     UserService userService;
 
+    private String userNotFoundMessg = "Userid not Found ";
+    private String adminName = "Admin";
+
     @GetMapping(path = "/User")
     public ResponseEntity<List<User>> getUsers() {
         logger.info("getUsers() is Executed");
         List<User> allUsers = userService.getAllUsers();
-        return new ResponseEntity<>(allUsers, HttpStatus.OK);
+        return new ResponseEntity<>(allUsers, new HttpHeaders(), HttpStatus.OK);
     }
 
     @GetMapping(path = "/User/{id}")
     public ResponseEntity<User> getOneUser(@PathVariable("id") UUID id) {
-        logger.info("getOneUser() " + id.toString() + " is Executed");
-        User singleUser = userService.getSingleUser(id);
-        logger.info("singleUser=" + singleUser);
+        logger.info("getOneUser() {} is Executed", id);
+        var singleUser = userService.getSingleUser(id);
+        logger.info("singleUser= {}", singleUser);
         if (singleUser == null)
-            throw new UserNotFoundException("Userid not Found " + id);
-        return new ResponseEntity<User>(singleUser, HttpStatus.OK);
+            throw new UserNotFoundException(userNotFoundMessg + id);
+        return new ResponseEntity<>(singleUser, new HttpHeaders(), HttpStatus.OK);
     }
 
     @PostMapping(path = "/User")
     public ResponseEntity<Object> saveUser(@RequestBody @Valid User emp) {
-        logger.info("saveUser() " + emp + " is Executed");
-        emp.setUpdatedBy("Admin");
+        logger.info("saveUser() {} is Executed", emp);
+        emp.setUpdatedBy(adminName);
         emp.setUpdatedOn(new Date());
-        emp.setCreatedBy("Admin");
+        emp.setCreatedBy(adminName);
         emp.setCreatedOn(new Date());
         User user;
         user = userService.save(emp);
-        logger.info("saved User is " + user);
-        return new ResponseEntity<Object>(user, HttpStatus.CREATED);
+        logger.info("saved User is {}", user);
+        return new ResponseEntity<>(user, new HttpHeaders(), HttpStatus.CREATED);
 
     }
 
     @PutMapping(path = "/User/{id}")
-    public ResponseEntity<Object> updateUser(@RequestBody @Valid User emp, @PathVariable("id") UUID id) {
+    public ResponseEntity<Object> updateUser(@RequestBody @Valid User user, @PathVariable("id") UUID id) {
         logger.info("updateUser() is Executed");
-        User user;
-        User singleUser = userService.getSingleUser(id);
+        var singleUser = userService.getSingleUser(id);
         if (singleUser != null) {
-            logger.info("Found existing User for PUT" + singleUser);
-            singleUser.setEmail(emp.getEmail());
-            singleUser.setUsername(emp.getUsername());
-            singleUser.setPhoneNo(emp.getPhoneNo());
-            singleUser.setProfilePic(emp.getProfilePic());
-            singleUser.setStatus(emp.getStatus());
-            singleUser.setUpdatedBy("Admin");
+            logger.info("Found existing User for PUT {}", singleUser);
+            singleUser.setEmail(user.getEmail());
+            singleUser.setUsername(user.getUsername());
+            singleUser.setPhoneNo(user.getPhoneNo());
+            singleUser.setProfilePic(user.getProfilePic());
+            singleUser.setStatus(user.getStatus());
+            singleUser.setUpdatedBy(adminName);
             singleUser.setUpdatedOn(new Date());
-            user = userService.save(singleUser);
-            return ResponseEntity.status(HttpStatus.ACCEPTED)
-                    .build();
+            userService.save(singleUser);
+            return new ResponseEntity<>(singleUser, new HttpHeaders(), HttpStatus.ACCEPTED);
+
         } else {
-            throw new UserNotFoundException("Userid not Found " + id);
+            throw new UserNotFoundException(userNotFoundMessg + id);
         }
     }
 
     @DeleteMapping(path = "/User/{id}")
     public ResponseEntity<Object> deleteUser(@PathVariable("id") UUID id) {
         logger.info("deleteUser() is Executed");
-        User delUser = userService.getSingleUser(id);
-        logger.info("deleted user is" + delUser);
+        var delUser = userService.getSingleUser(id);
+        logger.info("deleted user is {}", delUser);
         if (delUser == null)
-            throw new UserNotFoundException("Userid not Found " + id);
+            throw new UserNotFoundException(userNotFoundMessg + id);
         try {
             userService.delete(delUser);
         } catch (Exception e) {
-            logger.error("error Deleting the User" + delUser);
-            return new ResponseEntity<Object>(HttpStatus.INTERNAL_SERVER_ERROR);
+            logger.error("error Deleting the User {}", delUser);
+            return new ResponseEntity<>(delUser, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return new ResponseEntity<Object>(HttpStatus.OK);
+        return new ResponseEntity<>(delUser, new HttpHeaders(), HttpStatus.OK);
 
     }
 }

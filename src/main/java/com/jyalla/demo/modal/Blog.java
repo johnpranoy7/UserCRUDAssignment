@@ -47,7 +47,7 @@ public class Blog implements Serializable {
     @Column(name = "updated_by")
     private String updatedBy;
 
-    public Blog(UUID id, String title, String description, String url, User authorId, Date createdOn, String createdBy, Date updatedOn, String updatedBy) {
+    public Blog(UUID id, String title, String description, String url, User authorId, Date createdOn, String createdBy) {
         super();
         this.id = id;
         this.title = title;
@@ -56,13 +56,10 @@ public class Blog implements Serializable {
         this.authorId = authorId;
         this.createdOn = createdOn;
         this.createdBy = createdBy;
-        this.updatedOn = updatedOn;
-        this.updatedBy = updatedBy;
     }
 
     public Blog() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
     public UUID getId() {

@@ -1,14 +1,15 @@
 package com.jyalla.demo.exception;
 
 import java.util.List;
+import org.springframework.http.HttpStatus;
 
 public class ErrorDTO {
 
-    int status;
+    HttpStatus status;
     String message;
     List<String> details;
 
-    public ErrorDTO(String message, List<String> details, int status) {
+    public ErrorDTO(String message, List<String> details, HttpStatus status) {
         super();
         this.message = message;
         this.details = details;
@@ -17,14 +18,13 @@ public class ErrorDTO {
 
     public ErrorDTO() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
-    public int getStatus() {
+    public HttpStatus getStatus() {
         return status;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(HttpStatus status) {
         this.status = status;
     }
 

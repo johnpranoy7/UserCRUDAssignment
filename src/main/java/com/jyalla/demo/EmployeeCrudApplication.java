@@ -11,6 +11,7 @@ public class EmployeeCrudApplication {
     private static Logger logger = LoggerFactory.getLogger(EmployeeCrudApplication.class);
 
     public static void main(String[] args) {
+        logger.info("EmployeeCrudApplication Started");
         SpringApplication.run(EmployeeCrudApplication.class, args);
     }
 

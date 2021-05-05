@@ -2,27 +2,31 @@ package com.jyalla.demo.exception;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.servlet.NoHandlerFoundException;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 @Order(Ordered.HIGHEST_PRECEDENCE)
 // @SuppressWarnings({"unchecked", "rawtypes"})
 @ControllerAdvice
-public class RestExceptionHandler // extends ResponseEntityExceptionHandler {
-{
+public class RestExceptionHandler extends ResponseEntityExceptionHandler {
+
     @ExceptionHandler(value = UserNotFoundException.class)
     public ResponseEntity<Object> userNotFound(UserNotFoundException ex) {
         List<String> details = new ArrayList<>();
         details.add(ex.getMessage());
-        ErrorDTO errorDto = new ErrorDTO("User Not Found", details, HttpStatus.NOT_FOUND.value());
+        var errorDto = new ErrorDTO("User Not Found", details, HttpStatus.NOT_FOUND);
         return new ResponseEntity<>(errorDto, HttpStatus.NOT_FOUND);
     }
 
@@ -30,7 +34,7 @@ public class RestExceptionHandler // extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> articleNotFound(ArticleNotFoundException ex) {
         List<String> details = new ArrayList<>();
         details.add(ex.getMessage());
-        ErrorDTO errorDto = new ErrorDTO("Article Not Found", details, HttpStatus.NOT_FOUND.value());
+        var errorDto = new ErrorDTO("Article Not Found", details, HttpStatus.NOT_FOUND);
         return new ResponseEntity<>(errorDto, HttpStatus.NOT_FOUND);
     }
 
@@ -38,33 +42,39 @@ public class RestExceptionHandler // extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> methodArgumentTypeMismatchException(MethodArgumentTypeMismatchException ex) {
         List<String> details = new ArrayList<>();
         details.add(ex.getMessage());
-        ErrorDTO errorDto = new ErrorDTO("unable to Convert...", details, HttpStatus.BAD_REQUEST.value());
-        return new ResponseEntity<>(errorDto, HttpStatus.BAD_REQUEST);
+        var errorDto = new ErrorDTO("methodArgumentTypeMismatchException Occured...", details, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(errorDto, new HttpHeaders(), HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler({MethodArgumentNotValidException.class})
-    public ResponseEntity<Object> handleArgumentNotValidException(MethodArgumentNotValidException ex, Locale loc) {
-        List<String> details = new ArrayList<>();
-        details.add(ex.getMessage());
-        ErrorDTO errorDto = new ErrorDTO("unable to Convert...", details, HttpStatus.BAD_REQUEST.value());
-        return new ResponseEntity<>(errorDto, HttpStatus.BAD_REQUEST);
+    @Override
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+        List<String> errors = new ArrayList<>();
+        for (FieldError error : ex.getBindingResult()
+                .getFieldErrors()) {
+            errors.add(error.getField() + ": " + error.getDefaultMessage());
+        }
+        for (ObjectError error : ex.getBindingResult()
+                .getGlobalErrors()) {
+            errors.add(error.getObjectName() + ": " + error.getDefaultMessage());
+        }
+
+        var errorDto = new ErrorDTO(ex.getLocalizedMessage(), errors, HttpStatus.BAD_REQUEST);
+        return handleExceptionInternal(ex, errorDto, headers, errorDto.getStatus(), request);
     }
 
-    /*
-     * @Override protected ModelAndView
-     * handleMethodArgumentNotValidException(MethodArgumentNotValidException ex, HttpServletRequest
-     * request, HttpServletResponse response,
-     * 
-     * @Nullable Object handler) throws IOException { System.out.println(ex);
-     * response.sendError(HttpServletResponse.SC_BAD_REQUEST); return new ModelAndView(); }
-     */
+    @Override
+    protected ResponseEntity<Object> handleNoHandlerFoundException(NoHandlerFoundException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+        String error = "No handler found for " + ex.getHttpMethod() + " " + ex.getRequestURL();
 
+        var errorDto = new ErrorDTO(ex.getLocalizedMessage(), List.of(error), HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(errorDto, new HttpHeaders(), errorDto.getStatus());
+    }
 
     @ExceptionHandler(Exception.class)
     public final ResponseEntity<Object> handleAllExceptions(Exception ex, WebRequest request) {
         List<String> details = new ArrayList<>();
         details.add(ex.getLocalizedMessage());
-        ErrorDTO error = new ErrorDTO("Server Error", details, HttpStatus.INTERNAL_SERVER_ERROR.value());
-        return new ResponseEntity(error, HttpStatus.INTERNAL_SERVER_ERROR);
+        var error = new ErrorDTO("Server Error", details, HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(error, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
