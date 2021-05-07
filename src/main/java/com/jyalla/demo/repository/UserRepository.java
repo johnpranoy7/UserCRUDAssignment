@@ -10,4 +10,6 @@ import com.jyalla.demo.modal.User;
 // @RepositoryRestResource(collectionResourceRel = "users", path = "users")
 public interface UserRepository extends JpaRepository<User, UUID> {
     List<User> findByEmail(String email);
+
+    User findByUsername(String username);
 }

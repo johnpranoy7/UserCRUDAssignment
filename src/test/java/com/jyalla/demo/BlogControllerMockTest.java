@@ -45,7 +45,8 @@ class BlogControllerMockTest extends BaseClass {
     @Test
     @Order(1)
     void getBlogs() {
-        User user = new User(UUID.fromString("db47ce58-6f03-4d6d-9902-3837c925406d"), "dummyUser", "dummy@email.com", "1234", "", true, "Admin");
+        User user = new User(UUID.fromString("db47ce58-6f03-4d6d-9902-3837c925406d"), "dummyUser", "dummy@email.com", "1234", "", true, "Admin", new Date(),
+                "$2a$04$8T6i2fjNU54gI8LgArCLEOP8XMMSw/.bq/iRhuL6Y.ha46NyKAMaq", 2);
         when(blogService.getAllArticles())
                 .thenReturn(List.of(new Blog(UUID.fromString("14d5fb10-e63f-4cb9-8c05-4717555cfd47"), "DummyTitle1", "DumDescription1", "google.com", user, new Date(), "Admin")));
         blogController.getArticles();
@@ -59,7 +60,8 @@ class BlogControllerMockTest extends BaseClass {
     @Test
     @Order(3)
     void getSingleBlog() {
-        User user = new User(UUID.fromString("db47ce58-6f03-4d6d-9902-3837c925406d"), "dummyUser", "dummy@email.com", "1234", "", true, "Admin");
+        User user = new User(UUID.fromString("db47ce58-6f03-4d6d-9902-3837c925406d"), "dummyUser", "dummy@email.com", "1234", "", true, "Admin", new Date(),
+                "$2a$04$8T6i2fjNU54gI8LgArCLEOP8XMMSw/.bq/iRhuL6Y.ha46NyKAMaq", 2);
         when(blogService.getSingleArticle(UUID.fromString("14d5fb10-e63f-4cb9-8c05-4717555cfd47")))
                 .thenReturn(new Blog(UUID.fromString("14d5fb10-e63f-4cb9-8c05-4717555cfd47"), "DummyTitle1", "DumDescription1", "google.com", user, new Date(), "Admin"));
         blogController.getOneArticle(UUID.fromString("14d5fb10-e63f-4cb9-8c05-4717555cfd47"));
@@ -73,7 +75,8 @@ class BlogControllerMockTest extends BaseClass {
     @Order(2)
     void postBlog() {
 
-        User user = new User(UUID.fromString("db47ce58-6f03-4d6d-9902-3837c925406d"), "dummyUser", "dummy@email.com", "1234", "", true, "Admin");
+        User user = new User(UUID.fromString("db47ce58-6f03-4d6d-9902-3837c925406d"), "dummyUser", "dummy@email.com", "1234", "", true, "Admin", new Date(),
+                "$2a$04$8T6i2fjNU54gI8LgArCLEOP8XMMSw/.bq/iRhuL6Y.ha46NyKAMaq", 2);
         Blog blog = new Blog();
         when(blogService.save(blog))
                 .thenReturn(new Blog(UUID.fromString("14d5fb10-e63f-4cb9-8c05-4717555cfd47"), "DummyTitle1", "DumDescription1", "google.com", user, new Date(), "Admin"));
@@ -86,7 +89,8 @@ class BlogControllerMockTest extends BaseClass {
     @Test
     @Order(4)
     void putBlog() {
-        User user = new User(UUID.fromString("db47ce58-6f03-4d6d-9902-3837c925406d"), "dummyUser", "dummy@email.com", "1234", "", true, "Admin");
+        User user = new User(UUID.fromString("db47ce58-6f03-4d6d-9902-3837c925406d"), "dummyUser", "dummy@email.com", "1234", "", true, "Admin", new Date(),
+                "$2a$04$8T6i2fjNU54gI8LgArCLEOP8XMMSw/.bq/iRhuL6Y.ha46NyKAMaq", 2);
         Blog blog = new Blog(UUID.fromString("14d5fb10-e63f-4cb9-8c05-4717555cfd47"), "DummyTitle1", "DumDescription1", "google.com", user, new Date(), "Admin");
         when(blogService.save(blog))
                 .thenReturn(new Blog(UUID.fromString("14d5fb10-e63f-4cb9-8c05-4717555cfd47"), "DummyTitle1", "DumDescription1", "google.com", user, new Date(), "Admin"));
@@ -99,7 +103,8 @@ class BlogControllerMockTest extends BaseClass {
     @Test
     @Order(5)
     void deleteBlog() {
-        User user = new User(UUID.fromString("db47ce58-6f03-4d6d-9902-3837c925406d"), "dummyUser", "dummy@email.com", "1234", "", true, "Admin");
+        User user = new User(UUID.fromString("db47ce58-6f03-4d6d-9902-3837c925406d"), "dummyUser", "dummy@email.com", "1234", "", true, "Admin", new Date(),
+                "$2a$04$8T6i2fjNU54gI8LgArCLEOP8XMMSw/.bq/iRhuL6Y.ha46NyKAMaq", 2);
         Blog blog = new Blog(UUID.fromString("14d5fb10-e63f-4cb9-8c05-4717555cfd47"), "DummyTitle1", "DumDescription1", "google.com", user, new Date(), "Admin");
         doNothing().when(blogService)
                 .deleteArticle(blog);
@@ -112,7 +117,8 @@ class BlogControllerMockTest extends BaseClass {
     @Test()
     @Order(6)
     void articleNotFound() {
-        User user = new User(UUID.fromString("db47ce58-6f03-4d6d-9902-3837c925406d"), "dummyUser", "dummy@email.com", "1234", "", true, "Admin");
+        User user = new User(UUID.fromString("db47ce58-6f03-4d6d-9902-3837c925406d"), "dummyUser", "dummy@email.com", "1234", "", true, "Admin", new Date(),
+                "$2a$04$8T6i2fjNU54gI8LgArCLEOP8XMMSw/.bq/iRhuL6Y.ha46NyKAMaq", 2);
         Blog blog = new Blog(UUID.fromString("14d5fb10-e63f-4cb9-8c05-4717555cfd47"), "DummyTitle1", "DumDescription1", "google.com", user, new Date(), "Admin");
         when(blogService.getSingleArticle(any(UUID.class))).thenThrow(new ArticleNotFoundException());
         assertThrows(ArticleNotFoundException.class, () -> blogController.deleteArticle(blog.getId()));
