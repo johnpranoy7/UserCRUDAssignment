@@ -7,6 +7,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -16,6 +17,10 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.SignatureException;
+import io.jsonwebtoken.UnsupportedJwtException;
 
 @Order(Ordered.HIGHEST_PRECEDENCE)
 // @SuppressWarnings({"unchecked", "rawtypes"})
@@ -37,6 +42,23 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         var errorDto = new ErrorDTO("Article Not Found", details, HttpStatus.NOT_FOUND);
         return new ResponseEntity<>(errorDto, HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler({SignatureException.class, MalformedJwtException.class, UnsupportedJwtException.class, BadCredentialsException.class})
+    public ResponseEntity<Object> unauthorisedRequest(BadCredentialsException e) {
+        List<String> details = new ArrayList<>();
+        details.add(e.getMessage());
+        var errorDto = new ErrorDTO(e.getLocalizedMessage(), details, HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<>(errorDto, HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(value = ExpiredJwtException.class)
+    public ResponseEntity<Object> tokenExpiredException(ExpiredJwtException e) {
+        List<String> details = new ArrayList<>();
+        details.add(e.getMessage());
+        var errorDto = new ErrorDTO(e.getLocalizedMessage(), details, HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<>(errorDto, HttpStatus.UNAUTHORIZED);
+    }
+
 
     @ExceptionHandler({MethodArgumentTypeMismatchException.class})
     public ResponseEntity<Object> methodArgumentTypeMismatchException(MethodArgumentTypeMismatchException ex) {

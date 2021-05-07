@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,6 +33,9 @@ public class UserRestController {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     private String userNotFoundMessg = "Userid not Found ";
     private String adminName = "Admin";
@@ -56,13 +60,17 @@ public class UserRestController {
     @PostMapping(path = "/User")
     public ResponseEntity<Object> saveUser(@RequestBody @Valid User emp) {
         logger.info("saveUser() {} is Executed", emp);
+        // User user = new User(emp.getUsername(), emp.getEmail(), emp.getPhoneNo(),
+        // emp.getProfilePic(), emp.isStatus(), emp.getEncodedPassword(), emp.getRole());
+        User user;
+        emp.setPassword(passwordEncoder.encode(emp.getPassword()));
         emp.setUpdatedBy(adminName);
         emp.setUpdatedOn(new Date());
         emp.setCreatedBy(adminName);
         emp.setCreatedOn(new Date());
-        User user;
+
         user = userService.save(emp);
-        logger.info("saved User is {}", user);
+        logger.info("saved User is {}", emp);
         return new ResponseEntity<>(user, new HttpHeaders(), HttpStatus.CREATED);
 
     }

@@ -15,6 +15,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
 @Entity(name = "user")
 @Table(name = "\"user\"") // , uniqueConstraints = @UniqueConstraint(columnNames = {"phone_no",
@@ -53,6 +55,11 @@ public class User implements Serializable {
     @OneToMany(mappedBy = "authorId", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     // @RestResource(path = "articles", rel = "articles")
     private List<Blog> articles;
+    @JsonProperty(access = Access.WRITE_ONLY)
+    @Column(name = "password")
+    private String password;
+    @Column(name = "role")
+    private int role;
 
     public User() {
         super();
@@ -66,7 +73,10 @@ public class User implements Serializable {
         this.articles = articles;
     }
 
-    public User(UUID id, String username, String email, String phoneNo, String profilePic, boolean status, String createdBy) {
+
+    public User(UUID id, @NotBlank(message = "username is mandatory") String username,
+            @NotBlank(message = "email is mandatory") @Email(message = "email should be valid") String email, @NotBlank(message = "phone_no is mandatory") String phoneNo,
+            String profilePic, boolean status, String createdBy, Date createdOn, String password, int role) {
         super();
         this.id = id;
         this.username = username;
@@ -75,10 +85,43 @@ public class User implements Serializable {
         this.profilePic = profilePic;
         this.status = status;
         this.createdBy = createdBy;
-        this.createdOn = new Date();
+        this.createdOn = createdOn;
+        this.password = password;
+        this.role = role;
     }
 
 
+    public User(@NotBlank(message = "username is mandatory") String username, @NotBlank(message = "email is mandatory") @Email(message = "email should be valid") String email,
+            @NotBlank(message = "phone_no is mandatory") String phoneNo, String profilePic, boolean status, String password, int role) {
+        super();
+        this.username = username;
+        this.email = email;
+        this.phoneNo = phoneNo;
+        this.profilePic = profilePic;
+        this.status = status;
+        this.password = password;
+        this.role = role;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public int getRole() {
+        return role;
+    }
+
+    public void setRole(int role) {
+        this.role = role;
+    }
+
+    public static long getSerialversionuid() {
+        return serialVersionUID;
+    }
 
     public UUID getId() {
         return id;
@@ -167,8 +210,8 @@ public class User implements Serializable {
     @Override
     public String toString() {
         return "User [id=" + id + ", username=" + username + ", email=" + email + ", phoneNo=" + phoneNo + ", profilePic=" + profilePic + ", status=" + status + ", createdBy="
-                + createdBy + ", createdOn=" + createdOn + ", updatedBy=" + updatedBy + ", updatedOn=" + updatedOn + "]";
+                + createdBy + ", createdOn=" + createdOn + ", updatedBy=" + updatedBy + ", updatedOn=" + updatedOn + ", articles=" + articles + ", password=" + password + ", role="
+                + role + "]";
     }
-
 
 }
