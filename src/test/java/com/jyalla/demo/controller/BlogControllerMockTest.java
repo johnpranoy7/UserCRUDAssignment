@@ -1,4 +1,4 @@
-package com.jyalla.demo;
+package com.jyalla.demo.controller;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
@@ -17,7 +17,7 @@ import org.mockito.Mock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
-import com.jyalla.demo.controller.BlogController;
+import com.jyalla.demo.BaseClass;
 import com.jyalla.demo.exception.ArticleNotFoundException;
 import com.jyalla.demo.modal.Blog;
 import com.jyalla.demo.modal.User;
@@ -120,7 +120,7 @@ class BlogControllerMockTest extends BaseClass {
         User user = new User(UUID.fromString("db47ce58-6f03-4d6d-9902-3837c925406d"), "dummyUser", "dummy@email.com", "1234", "", true, "Admin", new Date(),
                 "$2a$04$8T6i2fjNU54gI8LgArCLEOP8XMMSw/.bq/iRhuL6Y.ha46NyKAMaq", 2);
         Blog blog = new Blog(UUID.fromString("14d5fb10-e63f-4cb9-8c05-4717555cfd47"), "DummyTitle1", "DumDescription1", "google.com", user, new Date(), "Admin");
-        when(blogService.getSingleArticle(any(UUID.class))).thenThrow(new ArticleNotFoundException());
+        when(blogService.getSingleArticle(any(UUID.class))).thenReturn(null);
         assertThrows(ArticleNotFoundException.class, () -> blogController.deleteArticle(blog.getId()));
     }
 }

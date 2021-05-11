@@ -1,8 +1,10 @@
-package com.jyalla.demo;
+package com.jyalla.demo.service;
 
 import static org.junit.Assert.assertTrue;
 import java.util.List;
 import java.util.UUID;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.junit.Ignore;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
@@ -11,10 +13,9 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import com.jyalla.demo.BaseClass;
 import com.jyalla.demo.modal.Blog;
 import com.jyalla.demo.modal.User;
-import com.jyalla.demo.service.BlogService;
-import com.jyalla.demo.service.UserService;
 
 
 @TestMethodOrder(OrderAnnotation.class)
@@ -117,13 +118,25 @@ public class BlogServiceTest extends BaseClass {
 
     }
 
-    @Test
+    @Autowired
+    private SessionFactory sessionFactory;
 
+    @Test
     @Order(8)
     public void findByTitle() {
+
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+
         List<Blog> title = blogService.findByTitle("DS");
         logger.info("Inside findByTitle() TestCase " + title.toArray());
         logger.info("title.get(0) " + title.get(0));
+
+        session.getTransaction()
+                .commit();
+        session.close();
+
+
     }
 
 }

@@ -17,6 +17,9 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.jyalla.demo.config.NumericBooleanDeserializer;
 
 @Entity(name = "user")
 @Table(name = "\"user\"") // , uniqueConstraints = @UniqueConstraint(columnNames = {"phone_no",
@@ -40,6 +43,8 @@ public class User implements Serializable {
     private String phoneNo;
     @Column(name = "profile_pic")
     private String profilePic;
+    @JsonSerialize(using = NumericBooleanSerializer.class)
+    @JsonDeserialize(using = NumericBooleanDeserializer.class)
     private boolean status;
     @Column(name = "created_by")
     private String createdBy;
@@ -55,11 +60,23 @@ public class User implements Serializable {
     @OneToMany(mappedBy = "authorId", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     // @RestResource(path = "articles", rel = "articles")
     private List<Blog> articles;
+
     @JsonProperty(access = Access.WRITE_ONLY)
     @Column(name = "password")
-    private String password;
+    private String password = "default";
+
     @Column(name = "role")
-    private int role;
+    private int role = 2;
+
+    // @JsonIgnore()
+    public String getPassword() {
+        return password;
+    }
+
+    // @JsonProperty(access = Access.WRITE_ONLY)
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
     public User() {
         super();
@@ -103,13 +120,7 @@ public class User implements Serializable {
         this.role = role;
     }
 
-    public String getPassword() {
-        return password;
-    }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
 
     public int getRole() {
         return role;
@@ -215,3 +226,5 @@ public class User implements Serializable {
     }
 
 }
+
+

@@ -38,6 +38,7 @@ public class BlogServiceImpl implements BlogService {
     }
 
     @Override
+    @Transactional
     public List<Blog> findByTitle(String string) {
         return blogRepository.findByTitle(string);
 
