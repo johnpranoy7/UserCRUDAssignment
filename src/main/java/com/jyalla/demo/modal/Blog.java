@@ -136,9 +136,10 @@ public class Blog implements Serializable {
 
     @Override
     public String toString() {
-        return "Blog [id=" + id + ", title=" + title + ", description=" + description + ", url=" + url + ", authorId=" + authorId + ", createdOn=" + createdOn + ", createdBy="
-                + createdBy + ", updatedOn=" + updatedOn + ", updatedBy=" + updatedBy + "]";
+        return "Blog [id=" + id + ", title=" + title + ", description=" + description + ", url=" + url + ", createdOn=" + createdOn + ", createdBy=" + createdBy + ", updatedOn="
+                + updatedOn + ", updatedBy=" + updatedBy + "]";
     }
+
 
 
 }

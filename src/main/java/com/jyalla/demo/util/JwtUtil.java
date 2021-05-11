@@ -51,7 +51,7 @@ public class JwtUtil {
         return doGenerateToken(userDetails, claims);
     }
 
-    private String doGenerateToken(UserDetails userDetails, Map<String, Object> claims) {
+    public String doGenerateToken(UserDetails userDetails, Map<String, Object> claims) {
 
         User user = userService.findByUsername(userDetails.getUsername());
 

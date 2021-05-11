@@ -1,4 +1,4 @@
-package com.jyalla.demo;
+package com.jyalla.demo.controller;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
@@ -14,10 +14,12 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
-import com.jyalla.demo.controller.UserRestController;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import com.jyalla.demo.BaseClass;
 import com.jyalla.demo.exception.UserNotFoundException;
 import com.jyalla.demo.modal.User;
 import com.jyalla.demo.service.BlogService;
@@ -38,6 +40,9 @@ class UserControllerMockTest extends BaseClass {
 
     @InjectMocks
     UserRestController userController;
+
+    @Spy
+    private PasswordEncoder passwordEncoder;
 
     @Test
     @Order(1)
@@ -68,14 +73,17 @@ class UserControllerMockTest extends BaseClass {
                 .is2xxSuccessful());
     }
 
+
     @Test
     @Order(2)
     void postUser() {
-        User user = new User(UUID.fromString("db47ce58-6f03-4d6d-9902-3837c925406d"), "dummyUser", "dummy@email.com", "1234", "", true, "Admin", new Date(),
-                "$2a$04$8T6i2fjNU54gI8LgArCLEOP8XMMSw/.bq/iRhuL6Y.ha46NyKAMaq", 2);
+        User user = new User(UUID.fromString("db47ce58-6f03-4d6d-9902-3837c925406d"), "dummyUser", "dummy@email.com", "1234", "", true, "Admin", new Date(), "dummyUser", 2);
+        logger.info(user.getPassword());
         when(userService.save(user)).thenReturn(user);
         when(userService.getSingleUser(user.getId())).thenReturn(user);
+
         ResponseEntity<Object> saveUser = userController.saveUser(user);
+        logger.info(saveUser.toString());
         // ResponseEntity<Object> saveUser = userController.saveUser(new UserDto(user.getId(),
         // user.getUsername(), user.getEmail(), user.getPhoneNo(),
         // user.getProfilePic(),user.getStatus(), user.getCreatedBy(), user.getCreatedOn(),
@@ -114,7 +122,8 @@ class UserControllerMockTest extends BaseClass {
     void userNotFound() {
         User user = new User(UUID.fromString("db47ce58-6f03-4d6d-9902-3837c925406d"), "dummyUser", "dummy@email.com", "1234", "", true, "Admin", new Date(),
                 "$2a$04$8T6i2fjNU54gI8LgArCLEOP8XMMSw/.bq/iRhuL6Y.ha46NyKAMaq", 2);
-        when(userService.getSingleUser(any(UUID.class))).thenThrow(new UserNotFoundException());
+        // when(userService.getSingleUser(any(UUID.class))).thenThrow(new UserNotFoundException());
+        when(userService.getSingleUser(any(UUID.class))).thenReturn(null);
         assertThrows(UserNotFoundException.class, () -> userController.deleteUser(user.getId()));
     }
 }

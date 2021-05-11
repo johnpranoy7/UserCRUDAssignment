@@ -63,7 +63,9 @@ public class UserRestController {
         // User user = new User(emp.getUsername(), emp.getEmail(), emp.getPhoneNo(),
         // emp.getProfilePic(), emp.isStatus(), emp.getEncodedPassword(), emp.getRole());
         User user;
+        logger.info("emp.getPassword() is {}", emp.getPassword());
         emp.setPassword(passwordEncoder.encode(emp.getPassword()));
+        logger.info("emp.getPassword() is {}", emp.getPassword());
         emp.setUpdatedBy(adminName);
         emp.setUpdatedOn(new Date());
         emp.setCreatedBy(adminName);
@@ -71,6 +73,7 @@ public class UserRestController {
 
         user = userService.save(emp);
         logger.info("saved User is {}", emp);
+        user.setPassword("Nulll");
         return new ResponseEntity<>(user, new HttpHeaders(), HttpStatus.CREATED);
 
     }

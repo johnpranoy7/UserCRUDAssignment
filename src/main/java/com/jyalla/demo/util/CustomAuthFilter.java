@@ -5,6 +5,8 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -18,6 +20,8 @@ import io.jsonwebtoken.ExpiredJwtException;
 
 @Component
 public class CustomAuthFilter extends OncePerRequestFilter {
+
+    static Logger logger = LoggerFactory.getLogger(CustomAuthFilter.class);
 
     @Autowired
     JwtUtil jwtUtil;
@@ -36,7 +40,7 @@ public class CustomAuthFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext()
                         .setAuthentication(authenticationToken);
             } else {
-                System.out.println("Cannot set Token");
+                logger.info("Cannot set Token");
             }
         } catch (ExpiredJwtException ex) {
             request.setAttribute("exception", ex);
