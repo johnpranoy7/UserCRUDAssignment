@@ -42,7 +42,7 @@ public class ExportController {
     }
 
     @GetMapping("/users-pdf")
-    public ResponseEntity<InputStreamResource> boxable() throws IOException {
+    public ResponseEntity<InputStreamResource> getUsersPdf() throws IOException {
         List<User> data = userService.getAllUsers();
         ByteArrayInputStream resource = pdfUtil.createPdf(data);
         var path = "./src/main/resources/SimpleTable.pdf";
