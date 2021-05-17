@@ -11,11 +11,11 @@ spring.jpa.generate-ddl=true
 spring.jpa.hibernate.ddl-auto = update
 spring.jpa.properties.hibernate.enable_lazy_load_no_trans=true
 
-spring.mvc.view.prefix= /WEB-INF/jsps/
-spring.mvc.view.suffix=.jsp
+#spring.mvc.view.prefix= /WEB-INF/jsps/
+#spring.mvc.view.suffix=.jsp
 
 jwt.secret=evoke
-jwt.max.expiry=5000000
+jwt.maxExpiry=5000000
 #debug=true
 
 flyway.url = jdbc:postgresql://localhost:5432/postgres

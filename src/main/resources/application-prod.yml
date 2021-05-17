@@ -1,0 +1,19 @@
+spring:
+  datasource:    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: Adonai7!
+    initialization-mode: always
+    platform: postgres
+  jpa:    show-sql: true
+    generate-ddl: true
+    hibernate:      ddl-auto: update
+    properties:      hibernate:
+        enable_lazy_load_no_trans: true
+  flyway:    url: jdbc:postgresql://localhost:5432/postgres
+    schemas: public
+    user: postgres
+    password: Adonai7!    
+        jwt:
+  secret: evoke
+  maxExpiry: 5000000
+    

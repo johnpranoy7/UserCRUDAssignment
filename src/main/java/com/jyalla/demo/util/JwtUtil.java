@@ -38,7 +38,7 @@ public class JwtUtil {
         this.secret = secret;
     }
 
-    @Value("${jwt.max.expiry}")
+    @Value("${jwt.maxExpiry}")
     public void setMaxExpiry(int maxExpiry) {
         this.maxExpiry = maxExpiry;
     }
