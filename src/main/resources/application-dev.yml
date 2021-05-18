@@ -12,9 +12,18 @@ spring:
   flyway:    url: jdbc:postgresql://localhost:5432/postgres
     schemas: public
     user: postgres
-    password: Adonai7!    
+    password: Adonai7!
+      rabbitmq:
+    username: appuser
+    password: appuser@123
+    host: 13.235.108.82
+    port: 5672
       jwt:
   secret: evoke
   maxExpiry: 5000000
   
 debug: true    
+rabbitmq:
+  queue: 2081-queue1
+  exchange: 2081-topic1
+  router: 2081-router1

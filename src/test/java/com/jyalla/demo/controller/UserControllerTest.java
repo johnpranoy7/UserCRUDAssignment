@@ -23,6 +23,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.client.RestClientException;
 import com.jyalla.demo.BaseClass;
+import com.jyalla.demo.messaging.MQUtil;
 import com.jyalla.demo.modal.JwtRequest;
 import com.jyalla.demo.modal.JwtResponse;
 import com.jyalla.demo.modal.User;
@@ -42,6 +43,9 @@ class UserControllerTest extends BaseClass {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    MQUtil mqUtil;
 
     @Mock
     private PasswordEncoder passwordEncoder;

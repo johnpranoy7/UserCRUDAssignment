@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +22,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import com.jyalla.demo.BaseClass;
 import com.jyalla.demo.exception.UserNotFoundException;
+import com.jyalla.demo.messaging.MQUtil;
 import com.jyalla.demo.modal.User;
 import com.jyalla.demo.service.BlogService;
 import com.jyalla.demo.service.UserService;
@@ -37,6 +39,9 @@ class UserControllerMockTest extends BaseClass {
 
     @Mock
     BlogService blogService;
+
+    @Mock
+    MQUtil mqUtil;
 
     @InjectMocks
     UserRestController userController;
@@ -81,6 +86,7 @@ class UserControllerMockTest extends BaseClass {
         logger.info(user.getPassword());
         when(userService.save(user)).thenReturn(user);
         when(userService.getSingleUser(user.getId())).thenReturn(user);
+        when(mqUtil.publishMessage(Mockito.any())).thenReturn(true);
 
         ResponseEntity<Object> saveUser = userController.saveUser(user);
         logger.info(saveUser.toString());

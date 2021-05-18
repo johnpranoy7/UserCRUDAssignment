@@ -20,6 +20,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.jyalla.demo.exception.UserNotFoundException;
+import com.jyalla.demo.messaging.CustomMessage;
+import com.jyalla.demo.messaging.MQUtil;
+import com.jyalla.demo.messaging.MessageNotSentException;
 import com.jyalla.demo.modal.User;
 import com.jyalla.demo.service.UserService;
 
@@ -33,6 +36,9 @@ public class UserRestController {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    MQUtil mqUtil;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -72,6 +78,14 @@ public class UserRestController {
         emp.setCreatedOn(new Date());
 
         user = userService.save(emp);
+
+        CustomMessage message = new CustomMessage();
+        message.setMessageBody("Saved the User with ID- " + user.getId() + " and Name: " + user.getUsername());
+        boolean publishMessage = mqUtil.publishMessage(message);
+        if (!publishMessage)
+            throw new MessageNotSentException();
+        logger.info("PublishMessage was {}", publishMessage);
+
         logger.info("saved User is {}", emp);
         user.setPassword("Nulll");
         return new ResponseEntity<>(user, new HttpHeaders(), HttpStatus.CREATED);
