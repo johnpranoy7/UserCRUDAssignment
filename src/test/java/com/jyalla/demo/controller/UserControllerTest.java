@@ -144,9 +144,10 @@ class UserControllerTest extends BaseClass {
     @Order(4)
     void putUser() {
         User user = new User();
+        user.setId(employeeId);
         user.setPhoneNo("8643");
         user.setEmail("controllertest@test.com");
-        user.setUsername("lol");
+        user.setUsername("controllertest");
         // when(userCon.updateUser(user, employeeId)).thenReturn(new
         // ResponseEntity<>(HttpStatus.OK));
 

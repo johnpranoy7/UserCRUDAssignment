@@ -106,6 +106,14 @@ public class UserRestController {
             singleUser.setUpdatedBy(adminName);
             singleUser.setUpdatedOn(new Date());
             userService.save(singleUser);
+
+            CustomMessage message = new CustomMessage();
+            message.setMessageBody("Modified the User with ID- " + user.getId() + " and Name: " + user.getUsername());
+            boolean publishMessage = mqUtil.publishMessageMultiple(message);
+            if (!publishMessage)
+                throw new MessageNotSentException();
+            logger.info("PublishMessage was {}", publishMessage);
+
             return new ResponseEntity<>(singleUser, new HttpHeaders(), HttpStatus.ACCEPTED);
 
         } else {

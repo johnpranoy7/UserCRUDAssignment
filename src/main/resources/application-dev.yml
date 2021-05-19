@@ -23,7 +23,3 @@ spring:
   maxExpiry: 5000000
   
 debug: true    
-rabbitmq:
-  queue: 2081-queue1
-  exchange: 2081-topic1
-  router: 2081-router1

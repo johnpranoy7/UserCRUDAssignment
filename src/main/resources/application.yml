@@ -27,6 +27,8 @@ spring:
     
 rabbitmq:
   queue: 2081-queue1
+  queue2: 2081-queue2
   exchange: 2081-topic1
   router: 2081-router1
+  routerDuplicate: 2081-router2
   

@@ -9,19 +9,22 @@ import org.springframework.context.annotation.Configuration;
 @ConfigurationProperties("rabbitmq")
 public class MQYamlConfig {
     public String queue;
+    public String queue2;
     public String exchange;
     public String router;
+    public String routerDuplicate;
 
-    public MQYamlConfig(String queue, String exchange, String router) {
+    public MQYamlConfig(String queue, String queue2, String routerDuplicate, String exchange, String router) {
         super();
         this.queue = queue;
+        this.queue2 = queue2;
         this.exchange = exchange;
         this.router = router;
+        this.routerDuplicate = routerDuplicate;
     }
 
     public MQYamlConfig() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
     public String getQueue() {
@@ -48,9 +51,25 @@ public class MQYamlConfig {
         this.router = router;
     }
 
+    public String getQueue2() {
+        return queue2;
+    }
+
+    public void setQueue2(String queue2) {
+        this.queue2 = queue2;
+    }
+
+    public String getRouterDuplicate() {
+        return routerDuplicate;
+    }
+
+    public void setRouterDuplicate(String routerDuplicate) {
+        this.routerDuplicate = routerDuplicate;
+    }
+
     @Override
     public String toString() {
-        return "MQYamlConfig [queue=" + queue + ", exchange=" + exchange + ", router=" + router + "]";
+        return "MQYamlConfig [queue=" + queue + ", queue2=" + queue2 + ", exchange=" + exchange + ", router=" + router + ", routerDuplicate=" + routerDuplicate + "]";
     }
 
 

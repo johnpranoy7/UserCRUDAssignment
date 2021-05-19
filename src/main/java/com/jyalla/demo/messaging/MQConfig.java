@@ -29,15 +29,34 @@ public class MQConfig {
     }
 
     @Bean
+    public Queue queue2() {
+        return new Queue(mqYaml.getQueue2(), true);
+    }
+
+    @Bean
     public TopicExchange exchange() {
         return new TopicExchange(mqYaml.getExchange());
+    }
+
+    @Bean
+    public Binding directBinding(Queue queue, TopicExchange exchange) {
+        return BindingBuilder.bind(queue)
+                .to(exchange)
+                .with(mqYaml.getRouter());
     }
 
     @Bean
     public Binding binding(Queue queue, TopicExchange exchange) {
         return BindingBuilder.bind(queue)
                 .to(exchange)
-                .with(mqYaml.getRouter());
+                .with(mqYaml.getRouterDuplicate());
+    }
+
+    @Bean
+    public Binding binding2(Queue queue2, TopicExchange exchange) {
+        return BindingBuilder.bind(queue2)
+                .to(exchange)
+                .with(mqYaml.getRouterDuplicate());
     }
 
     @Bean

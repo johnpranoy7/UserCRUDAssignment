@@ -22,7 +22,3 @@ spring:
   secret: evoke
   maxExpiry: 5000000
 
-rabbitmq:
-  queue: 2081-queue1
-  exchange: 2081-topic1
-  router: 2081-router1

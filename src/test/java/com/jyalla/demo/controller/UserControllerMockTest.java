@@ -105,6 +105,7 @@ class UserControllerMockTest extends BaseClass {
                 "$2a$04$8T6i2fjNU54gI8LgArCLEOP8XMMSw/.bq/iRhuL6Y.ha46NyKAMaq", 2);
         when(userService.save(user)).thenReturn(user);
         when(userService.getSingleUser(user.getId())).thenReturn(user);
+        when(mqUtil.publishMessageMultiple(Mockito.any())).thenReturn(true);
         ResponseEntity<Object> saveUser = userController.updateUser(user, user.getId());
         assertEquals(true, saveUser.getStatusCode()
                 .is2xxSuccessful());

@@ -24,4 +24,14 @@ public class MQUtil {
 
         return true;
     }
+
+    public boolean publishMessageMultiple(CustomMessage message) {
+
+        message.setMessageId(UUID.randomUUID()
+                .toString());
+        message.setMessageDate(new Date());
+        template.convertAndSend(mqYaml.exchange, mqYaml.routerDuplicate, message);
+        return true;
+    }
+
 }

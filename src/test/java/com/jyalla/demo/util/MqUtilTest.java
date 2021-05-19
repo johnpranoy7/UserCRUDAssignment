@@ -40,4 +40,13 @@ class MqUtilTest extends BaseClass {
         assertThatNoException();
     }
 
+    @Test
+    @Order(2)
+    void publishMessageMultiple() {
+        CustomMessage message = new CustomMessage("1", "testMultiple", new Date());
+
+        mqUtil.publishMessageMultiple(message);
+        assertThatNoException();
+    }
+
 }
