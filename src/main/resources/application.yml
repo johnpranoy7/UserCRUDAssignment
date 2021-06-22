@@ -8,7 +8,6 @@ spring:
     password: Adonai7!
     initialization-mode: always
     platform: postgres
-
   jpa:    show-sql: true
     generate-ddl: true
     hibernate:      ddl-auto: update
@@ -20,7 +19,7 @@ spring:
     password: Adonai7!  rabbitmq:    username: appuser
     password: appuser@123
     host: 13.235.108.82
-    port: 5672    
+    port: 5672  mvc:    view:      prefix: /WEB-INF/jsps/      suffix: .jsp
         jwt:
   secret: evoke
   maxExpiry: 5000000

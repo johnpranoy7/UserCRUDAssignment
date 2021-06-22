@@ -7,6 +7,10 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +22,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.jyalla.demo.exception.UserNotFoundException;
 import com.jyalla.demo.messaging.CustomMessage;
@@ -51,6 +56,17 @@ public class UserRestController {
         logger.info("getUsers() is Executed");
         List<User> allUsers = userService.getAllUsers();
         return new ResponseEntity<>(allUsers, new HttpHeaders(), HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/user")
+    public ResponseEntity<Page<User>> getAllUsersPagination(@RequestParam(name = "page") Integer page, @RequestParam(name = "size") Integer size) {
+
+        Sort sort = Sort.by("username")
+                .ascending();
+        Pageable pageable = PageRequest.of(page, size, sort);
+        logger.info("getUsers() is Executed");
+        Page<User> allUsers = userService.getAll(pageable);
+        return ResponseEntity.ok(allUsers);
     }
 
     @GetMapping(path = "/User/{id}")
